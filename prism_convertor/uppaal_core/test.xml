@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+
+
+int DIFS = 128;
+int SIFS = 28;
+int aSLOTTIME = 50;
+int DATA_TIME_MIN = 224;
+int DATA_TIME_MAX = 15717;
+int ACK_TIME = 205;
+int RTS_TIME = 300;
+int CTS_TIME = 205;
+int CTS_timeout = 400;
+int ACK_timeout = 400;
+
+// two variables used to store the ID of the process that is sending and that of the process that is receiving
+int senderID, receiverID;
+
+// an extra global clock is used to keep track of the total amount of time (it is never reset)
+clock globalTime;
+
+broadcast chan MEDIUM_BUSY, MEDIUM_FREE;
+
+chan M, RTS, CTS, DATA, ACK;
+</declaration>
+	<template>
+		<name>Sender</name>
+		<parameter>const int ID</parameter>
+		<declaration>
+clock x; // clock
+int bc;
+
+
+bool medium_busy = false;</declaration>
+		<location id="id0" x="42" y="-204">
+		</location>
+		<location id="id1" x="-68" y="-127">
+			<name x="-78" y="-161">FREEZE</name>
+		</location>
+		<location id="id2" x="-433" y="-213">
+			<name x="-450" y="-264">BACK_OFF</name>
+		</location>
+		<location id="id3" x="-654" y="272">
+			<name x="-706" y="288">WAIT_ACK</name>
+		</location>
+		<location id="id4" x="25" y="289">
+			<name x="42" y="263">SEND_DATA</name>
+		</location>
+		<location id="id5" x="34" y="-442">
+			<name x="24" y="-476">WAIT_CTS</name>
+		</location>
+		<location id="id6" x="-552" y="-391">
+			<name x="-562" y="-425">SEND_RTS</name>
+		</location>
+		<location id="id7" x="-696" y="-221">
+			<name x="-706" y="-255">IDLE</name>
+		</location>
+		<init ref="id7"/>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-331" y="34">medium_busy == false &amp;&amp;
+bc &lt; 0 &amp;&amp;
+x == aSLOTTIME</label>
+			<label kind="assignment" x="-340" y="93">x := 0,
+bc := bc - 1</label>
+			<nail x="-323" y="8"/>
+			<nail x="-365" y="110"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-229" y="-102">MEDIUM_FREE?</label>
+			<label kind="assignment" x="-229" y="-51">medium_busy := false,
+bc := 5 ,
+x:= 0</label>
+			<nail x="-272" y="0"/>
+			<nail x="-212" y="-76"/>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id0"/>
+			<label kind="guard" x="-105" y="-370">x &lt; CTS_timeout</label>
+			<label kind="synchronisation" x="-76" y="-349">CTS?</label>
+			<label kind="assignment" x="-59" y="-323">x := 0</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id4"/>
+			<label kind="guard" x="59" y="-17">x ==SIFS</label>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id7"/>
+			<label kind="guard" x="-885" y="-273">x &lt; DIFS</label>
+			<nail x="-825" y="-196"/>
+			<nail x="-817" y="-256"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-544" y="161">medium_busy == true</label>
+			<nail x="-544" y="136"/>
+			<nail x="-459" y="136"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-246" y="-221">MEDIUM_BUSY?</label>
+			<label kind="assignment" x="-221" y="-195">medium_busy := true</label>
+			<nail x="-246" y="-195"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id1"/>
+			<nail x="-221" y="-144"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-620" y="-119">x == ACK_timeout</label>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-646" y="-246">medium_busy == false</label>
+			<label kind="synchronisation" x="-612" y="-212">MEDIUM_BUSY?</label>
+			<label kind="assignment" x="-671" y="-195">x := 0, medium_busy := true</label>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id6"/>
+			<label kind="guard" x="-561" y="-306">bc == 0</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-306" y="-298">x == CTS_timeout</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id7"/>
+			<label kind="guard" x="-816" y="-42">x &lt; ACK_timeout</label>
+			<label kind="synchronisation" x="-722" y="34">ACK?</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="-374" y="255">DATA!</label>
+			<label kind="assignment" x="-280" y="263">x:= 0</label>
+			<label kind="comments" x="-408" y="297">quelque chose a faire ici</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id5"/>
+			<label kind="guard" x="-450" y="-434">x == RTS_TIME</label>
+			<label kind="synchronisation" x="-323" y="-434">RTS!</label>
+			<label kind="assignment" x="-501" y="-391">x:= 0, senderID:= ID, receiverID:=ID</label>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id6"/>
+			<label kind="guard" x="-678" y="-340">x == DIFS</label>
+			<label kind="assignment" x="-680" y="-314">x := 0</label>
+		</transition>
+	</template>
+	<template>
+		<name>Medium</name>
+		<location id="id8" x="-339" y="43">
+			<name x="-289" y="34">COLLISION</name>
+		</location>
+		<location id="id9" x="-365" y="-297">
+			<name x="-375" y="-331">BUSY</name>
+		</location>
+		<location id="id10" x="-722" y="-297">
+			<name x="-732" y="-331">IDLE</name>
+		</location>
+		<location id="id11" x="681" y="-297">
+			<name x="671" y="-331">BUSY</name>
+		</location>
+		<init ref="id10"/>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id8"/>
+			<label kind="synchronisation" x="-85" y="-195">DATA?</label>
+			<nail x="-68" y="-161"/>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id8"/>
+			<label kind="synchronisation" x="-238" y="-161">ACK?</label>
+			<nail x="-170" y="-153"/>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id8"/>
+			<label kind="synchronisation" x="-289" y="-178">CTS?</label>
+			<nail x="-263" y="-136"/>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id9"/>
+			<label kind="synchronisation" x="-195" y="-289">MEDIUM_BUSY!</label>
+			<nail x="-195" y="-340"/>
+			<nail x="-221" y="-255"/>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id9"/>
+			<label kind="synchronisation" x="-578" y="-391">ACK?</label>
+			<nail x="-561" y="-408"/>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id9"/>
+			<label kind="synchronisation" x="-629" y="-535">RTS?</label>
+			<nail x="-561" y="-578"/>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id9"/>
+			<label kind="synchronisation" x="-578" y="-450">CTS?</label>
+			<nail x="-569" y="-476"/>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id8"/>
+			<nail x="-305" y="145"/>
+			<nail x="-246" y="119"/>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id10"/>
+			<label kind="synchronisation" x="-595" y="-204">MEDIUM_FREE!</label>
+			<nail x="-535" y="-110"/>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id10"/>
+			<label kind="synchronisation" x="-646" y="8">MEDIUM_FREE!</label>
+			<nail x="-722" y="34"/>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id8"/>
+			<label kind="synchronisation" x="-340" y="-144">RTS?</label>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id9"/>
+			<label kind="synchronisation" x="-578" y="-348">DATA?</label>
+			<nail x="-569" y="-313"/>
+		</transition>
+	</template>
+	<template>
+		<name x="5" y="5">Receiver</name>
+		<parameter>const int ID</parameter>
+		<declaration>clock y;
+bool medium_busy = false ;</declaration>
+		<location id="id12" x="-1028" y="-297">
+			<name x="-1122" y="-314">SEND_ACK</name>
+			<label kind="invariant" x="-1071" y="-272">y &lt;= ACK_TIME</label>
+		</location>
+		<location id="id13" x="-748" y="-297">
+			<name x="-758" y="-331">RECEIVED_DATA</name>
+			<label kind="invariant" x="-790" y="-280">y &lt;= SIFS</label>
+		</location>
+		<location id="id14" x="-442" y="-297">
+			<name x="-425" y="-314">WAIT_DATA</name>
+		</location>
+		<location id="id15" x="-442" y="-509">
+			<name x="-452" y="-543">SEND_CTS</name>
+			<label kind="invariant" x="-425" y="-510">y &lt;= CTS_TIME</label>
+		</location>
+		<location id="id16" x="-731" y="-518">
+			<name x="-741" y="-552">WAIT_SIFS</name>
+		</location>
+		<location id="id17" x="-1028" y="-509">
+			<name x="-1038" y="-543">IDLE</name>
+		</location>
+		<init ref="id17"/>
+		<transition>
+			<source ref="id16"/>
+			<target ref="id17"/>
+			<label kind="synchronisation" x="-918" y="-476">MEDIUM_BUSY?</label>
+			<label kind="assignment" x="-935" y="-408">medium_busy := true</label>
+			<nail x="-858" y="-424"/>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id17"/>
+			<label kind="synchronisation" x="-1020" y="-408">ACK!</label>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id12"/>
+			<label kind="assignment" x="-1010" y="-297">y := 0</label>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id13"/>
+			<label kind="synchronisation" x="-595" y="-323">DATA?</label>
+			<label kind="assignment" x="-603" y="-289">y:= 0</label>
+		</transition>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id14"/>
+			<label kind="synchronisation" x="-433" y="-425">CTS!</label>
+			<label kind="assignment" x="-433" y="-399">senderID := ID,
+receiverID := ID</label>
+		</transition>
+		<transition>
+			<source ref="id16"/>
+			<target ref="id15"/>
+			<label kind="guard" x="-739" y="-484">medium_busy == false &amp;&amp; y == SIFS</label>
+			<label kind="assignment" x="-713" y="-513">y := 0</label>
+		</transition>
+		<transition>
+			<source ref="id17"/>
+			<target ref="id16"/>
+			<label kind="synchronisation" x="-901" y="-544">RTS?</label>
+			<label kind="assignment" x="-935" y="-518">y:= 0</label>
+			<nail x="-1020" y="-518"/>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+
+S1 = Sender(1);
+S2 = Sender(2);
+
+R1 = Receiver(1);
+R2 = Receiver(2);
+
+medium = Medium();
+
+// List one or more processes to be composed into a system.
+system R1, R2, S1, S2, medium;
+    </system>
+	<queries>
+		<query>
+			<formula>A[] not deadlock
+			</formula>
+			<comment>
+			</comment>
+		</query>
+	</queries>
+</nta>

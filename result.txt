@@ -1,0 +1,23 @@
+pta
+module PTA
+
+  s: [0..3] init 0;
+  // S0 : 0
+  // S2 : 1
+  // S3 : 2
+  // S1 : 3
+  x: clock;
+  tries: int init 0;
+  N: int init 0;
+
+  invariant
+    (s=0=>x<=2) & (s=3=>x<=5)
+  endinvariant
+
+  [] s=0 & (x>=1 & tries <= N) 
+     -> 0.9 : (s'=2)
+      + 0.1 : (s'=3) & (tries'=tries+1) & (x'=0) ;
+  [] s=0 & (tries > N) -> (s'=1) ;
+  [] s=3 & (x>=3) -> (s'=0) & (x'=0) ;
+
+endmodule

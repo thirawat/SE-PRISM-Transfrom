@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>clock x;
+int tries = 0;
+const int N = 0;
+</declaration>
+	<template>
+		<name x="5" y="5">PTA</name>
+		<location id="id0" x="-544" y="-119">
+			<name x="-554" y="-153">S0</name>
+			<label kind="invariant" x="-604" y="-127">x&lt;=2</label>
+		</location>
+		<location id="id1" x="-544" y="110">
+			<name x="-570" y="76">S2</name>
+		</location>
+		<location id="id2" x="-290" y="110">
+			<name x="-317" y="67">S3</name>
+		</location>
+		<location id="id3" x="-290" y="-119">
+			<name x="-300" y="-153">S1</name>
+			<label kind="invariant" x="-300" y="-102">x&lt;=5</label>
+		</location>
+		<branchpoint id="id4" x="-400" y="16">
+		</branchpoint>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id0"/>
+			<label kind="guard" x="-375" y="-119">x&gt;=3</label>
+			<label kind="assignment" x="-502" y="-145">x:=0</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id2"/>
+			<label kind="probability" x="-375" y="59">90</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id3"/>
+			<label kind="assignment" x="-349" y="-43">tries++,x=0</label>
+			<label kind="probability" x="-375" y="-18">10</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id4"/>
+			<label kind="guard" x="-519" y="-43">x&gt;=1 &amp;&amp; tries &lt;= N</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-621" y="8">tries &gt; N</label>
+		</transition>
+	</template>
+	<system>pta1 = PTA();
+system pta1;</system>
+	<queries>
+		<query>
+			<formula>E&lt;&gt; pta1.S2 </formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>Pr[&lt;=100](&lt;&gt; pta1.S2 )</formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>

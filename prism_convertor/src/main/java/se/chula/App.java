@@ -15,7 +15,7 @@ public class App
 {
     public static void main( String[] args )
     {
-        String xmlPath = "/app/prism_convertor/xml/pta.xml";
+        String xmlPath = "xml/ex2.xml";
         
         PrismFormatter formater = new PrismFormatter();
         try {
