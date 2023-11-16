@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>
+    // Declare the clock variable
+    clock x;
+  </declaration>
+	<template>
+		<name>P</name>
+		<location id="id0" x="0" y="0">
+			<name x="-10" y="-30">Initial</name>
+			<label kind="invariant" x="0" y="100">x &lt;= 15</label>
+		</location>
+		<location id="id1" x="150" y="0">
+			<name x="140" y="-30">Final</name>
+			<label kind="invariant" x="150" y="40">x &lt;= 15</label>
+		</location>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="guard" x="70" y="20">x &gt;= 5</label>
+			<label kind="synchronisation" x="70" y="0">sync</label>
+			<label kind="probability" x="70" y="40">0.8</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="guard" x="70" y="80">x &gt;= 5</label>
+			<label kind="synchronisation" x="70" y="60">sync</label>
+			<label kind="probability" x="70" y="100">0.2</label>
+		</transition>
+	</template>
+	<system>pta1 = P();
+system pta1;</system>
+	<queries>
+		<query>
+			<formula></formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>

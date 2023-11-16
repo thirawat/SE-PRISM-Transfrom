@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>
+    // Declare clock variables
+    clock x;
+  	</declaration>
+	<template>
+		<name>PTA</name>
+		<location id="id0" x="263" y="357">
+			<name x="204" y="348">Initial</name>
+			<label kind="invariant" x="253" y="374">x &lt;= 5</label>
+		</location>
+		<location id="id1" x="263" y="144">
+			<name x="178" y="136">Location2</name>
+			<label kind="invariant" x="204" y="161">x &lt;= 10</label>
+		</location>
+		<location id="id2" x="561" y="144">
+			<name x="578" y="127">Location3</name>
+			<label kind="invariant" x="586" y="153">x &lt;= 15</label>
+		</location>
+		<location id="id3" x="561" y="348">
+			<name x="586" y="340">Final</name>
+			<label kind="invariant" x="586" y="365">x &lt;= 7</label>
+		</location>
+		<branchpoint id="id4" x="408" y="144">
+		</branchpoint>
+		<branchpoint id="id5" x="408" y="357">
+		</branchpoint>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id0"/>
+			<label kind="assignment" x="331" y="187">x:=0</label>
+			<label kind="probability" x="365" y="153">50</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id4"/>
+			<label kind="guard" x="306" y="119">x &lt;= 10</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id5"/>
+			<label kind="guard" x="314" y="365">x &lt;= 5</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id2"/>
+			<label kind="assignment" x="426" y="144">x:=0</label>
+			<label kind="probability" x="433" y="119">50</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id2"/>
+			<label kind="assignment" x="459" y="297">x :=0</label>
+			<label kind="probability" x="442" y="323">20</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id1"/>
+			<label kind="assignment" x="331" y="297">x :=0</label>
+			<label kind="probability" x="357" y="323">80</label>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id3"/>
+			<label kind="guard" x="586" y="229">x &lt;= 15</label>
+			<label kind="assignment" x="586" y="246">x := 0</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+
+Process = PTA();
+
+// List one or more processes to be composed into a system.
+
+system Process;</system>
+	<queries>
+		<query>
+			<formula></formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>

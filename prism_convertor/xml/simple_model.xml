@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>
+    // Global declarations
+    clock x; // A clock variable
+    </declaration>
+	<template>
+		<name>PTAExample</name>
+		<declaration>
+        // Local declarations
+        </declaration>
+		<location id="id0" x="8" y="102">
+			<name x="-8" y="68">Start</name>
+		</location>
+		<location id="id1" x="110" y="102">
+			<name x="136" y="93">Choice</name>
+		</location>
+		<location id="id2" x="348" y="102">
+			<name x="374" y="93">End</name>
+		</location>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id2"/>
+			<label kind="guard" x="212" y="-13">x &lt; 5</label>
+			<label kind="assignment" x="212" y="17">x = 0</label>
+			<nail x="150" y="50"/>
+			<nail x="300" y="50"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id2"/>
+			<label kind="guard" x="195" y="170">x &gt;= 5</label>
+			<label kind="assignment" x="195" y="195">x = 0</label>
+			<nail x="150" y="150"/>
+			<nail x="300" y="150"/>
+		</transition>
+	</template>
+	<system>
+    // System declarations
+    PTA = PTAExample();
+    system PTA;
+    </system>
+	<queries>
+		<query>
+			<formula></formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>

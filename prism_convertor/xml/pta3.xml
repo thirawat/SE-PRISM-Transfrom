@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>
+    // Declare the clock variables
+    clock  y;
+  </declaration>
+	<template>
+		<name>PTA</name>
+		<location id="id0" x="-161" y="221">
+			<name x="-171" y="191">Initial</name>
+			<label kind="invariant" x="-195" y="246">y &gt;= 0</label>
+		</location>
+		<location id="id1" x="153" y="-110">
+			<name x="143" y="-140">Intermediate</name>
+			<label kind="invariant" x="178" y="-123">y &gt;= 1</label>
+		</location>
+		<location id="id2" x="306" y="170">
+			<name x="296" y="140">Final</name>
+			<label kind="invariant" x="315" y="187">y &gt;= 2</label>
+		</location>
+		<branchpoint id="id3" x="-8" y="136">
+		</branchpoint>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-110" y="161">y &lt;= 10</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id2"/>
+			<label kind="assignment" x="102" y="170">y := 2</label>
+			<label kind="probability" x="127" y="127">30</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id1"/>
+			<label kind="assignment" x="8" y="8">y := 1</label>
+			<label kind="probability" x="59" y="25">70</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id2"/>
+			<label kind="guard" x="280" y="-12">y &lt;= 9</label>
+			<label kind="assignment" x="280" y="8">y := 2</label>
+		</transition>
+	</template>
+	<system>pta1 = PTA();
+system pta1;</system>
+	<queries>
+		<query>
+			<formula></formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>

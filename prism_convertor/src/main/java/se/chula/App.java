@@ -15,7 +15,7 @@ public class App
 {
     public static void main( String[] args )
     {
-        String xmlPath = "xml/ex2.xml";
+        String xmlPath = "xml/pta.xml";
         
         PrismFormatter formater = new PrismFormatter();
         try {
@@ -28,10 +28,6 @@ public class App
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        
-        
         // Prism prism = new Prism(null);
-        
     }
-
 }
