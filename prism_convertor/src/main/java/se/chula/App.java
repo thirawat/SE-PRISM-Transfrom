@@ -1,11 +1,10 @@
 package se.chula;
 
-import prism.Prism;
-import se.chula.prism.PrismFormatter;
-
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import org.xml.sax.SAXException;
+
+import se.chula.pta.PTAConverter;
 
 /**
  * Hello world!
@@ -16,11 +15,12 @@ public class App
     public static void main( String[] args )
     {
         String xmlPath = "xml/pta.xml";
+        // String xmlPath = "xml/simple_model.xml";
         
-        PrismFormatter formater = new PrismFormatter();
+        PTAConverter converter = new PTAConverter();
         try {
-            formater.readXML(xmlPath);
-            String prism_code = formater.transform();
+            converter.loadUppaalModel(xmlPath);
+            String prism_code = converter.transform();
             System.out.println(prism_code);
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
@@ -28,6 +28,5 @@ public class App
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        // Prism prism = new Prism(null);
     }
 }
