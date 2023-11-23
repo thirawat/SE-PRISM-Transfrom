@@ -5,7 +5,7 @@
 		<name x="5" y="5">PTA</name>
 		<declaration>
 		int tries = 0;   
-		clock x;     
+		clock x;  
 		const int N = 0;</declaration>
 		<location id="id0" x="-8" y="-25">
 			<name x="-18" y="-59">S0</name>

@@ -3,6 +3,7 @@ package se.chula.pta;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import se.chula.pta.component.Branchpoint;
 import se.chula.pta.component.Declaration;
@@ -35,14 +36,14 @@ public class PRISMModel {
     private String formatTransition() throws Exception {
         List<String> result = new ArrayList<String>();
         List<Location> locations = this.template.getLocations();
-        String state_param = this.template.getStateParamName();
+        String stateParam = this.template.getStateParamName();
         for(Location location : locations){
             List<Transition>  transitions = location.getTransitions();
             for(Transition transition : transitions){
                 Point targetObj = transition.getTargetObj();
                 List<String> transitionList = new ArrayList<String>();
                 transitionList.add("[]");
-                transitionList.add(state_param+"="+location.getIndex());
+                transitionList.add(stateParam+"="+location.getIndex());
                 String guard = transition.getGuard();
                 if(guard != null){
                     transitionList.add("& ("+guard+")");
@@ -50,8 +51,8 @@ public class PRISMModel {
                 if(targetObj instanceof Location){
                     Location targetLocation = (Location)targetObj;
                     transitionList.add("->");    
-                    transitionList.add("("+state_param+"'="+targetLocation.getIndex()+")");
-                    String assignment =  this.formatTransitionAssignment(transition.getAssignment());
+                    transitionList.add("("+stateParam+"'="+targetLocation.getIndex()+")");
+                    String assignment =  this.formatAssignment(transition.getAssignment());
                     if(assignment != null){
                         transitionList.add("& "+assignment);
                     };
@@ -65,8 +66,8 @@ public class PRISMModel {
                     for(Transition branchTransition : branchTransitions){
                         Location targetLocationObj = (Location)branchTransition.getTargetObj();
                         Double probability = branchTransition.getFormatProbability();
-                        String branchTransitionString = probability+" : ("+state_param+"'="+targetLocationObj.getIndex()+")";
-                        String assignment =  this.formatTransitionAssignment(branchTransition.getAssignment());
+                        String branchTransitionString = probability+" : ("+stateParam+"'="+targetLocationObj.getIndex()+")";
+                        String assignment =  this.formatAssignment(branchTransition.getAssignment());
                         if(assignment != null){
                             branchTransitionString += " & "+assignment;
                         };
@@ -89,10 +90,14 @@ public class PRISMModel {
     private String formatInvariant() {
         List<String> invariantList = new ArrayList<String>();
         List<Location> locations = this.template.getLocations();
+        String stateParam = this.template.getStateParamName();
         for (Location location : locations) {
-            String invariantString = location.formatInvariant();
-            if (invariantString != null)
+            Integer index = location.getIndex();
+            String invariant = location.getInvariant();
+            if(invariant != null){
+                String invariantString = "("+stateParam+"="+index+"=>"+ invariant+")";
                 invariantList.add(invariantString);
+            }
         }
         List<String> result = new ArrayList<String>();
         if (invariantList.size() > 0) {
@@ -105,7 +110,7 @@ public class PRISMModel {
 
     private String formatDefinition() {
         Declaration declaration = this.template.getDeclaration();
-        List<String> declarations = declaration.transform();
+        List<String> declarations = this.formatDeclaration(declaration.getStates());
 
         List<String> def_list = this.formatStateDefinition();
         def_list.addAll(declarations);
@@ -117,7 +122,7 @@ public class PRISMModel {
         Integer init = 0;
         List<String> stateName = new ArrayList<String>();
         List<Location> locations = this.template.getLocations();
-        String state_param = this.template.getStateParamName();
+        String stateParam = this.template.getStateParamName();
         String templateInit = this.template.getInit();
         for (Location location : locations) {
             if (templateInit.equals(location.getId()))
@@ -125,7 +130,7 @@ public class PRISMModel {
             stateName.add("// " + location.getName() + " : " + location.getIndex());
         }
         List<String> result = new ArrayList<String>();
-        result.add(state_param + ": [0.." + (locations.size() - 1) + "] init " + init + ";");
+        result.add(stateParam + ": [0.." + (locations.size() - 1) + "] init " + init + ";");
         result.addAll(stateName);
         return result;
     }
@@ -134,7 +139,7 @@ public class PRISMModel {
         return result.size() > 0 ? "  " + String.join("\n  ", result) + "\n" : "";
     }
 
-    private String formatTransitionAssignment(String assignment) {
+    private String formatAssignment(String assignment) {
         String result = assignment;
         if(assignment != null){
             List<String> assignmentResult = new ArrayList<String>();
@@ -167,4 +172,20 @@ public class PRISMModel {
         }
         return result;
     }
+
+    public List<String> formatDeclaration(List<Object> states){
+        List<String> transformString = new ArrayList<String>();
+        for(Object state : states){
+            if(state instanceof Map){
+                Map<String,Object> stateMap = (Map<String,Object>)state;
+                String[] defElement = (String[]) stateMap.get("param");
+                String value = (String) stateMap.get("value");
+                Integer last = defElement.length - 1;
+                String defSring = defElement[last]+": "+defElement[last-1];
+                transformString.add(defSring +(value != null?" init "+value:"")+ ";");   
+            }
+        }
+        return transformString;
+    }
+
 }

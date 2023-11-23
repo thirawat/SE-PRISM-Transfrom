@@ -98,7 +98,6 @@ public class Template {
         for (Integer index = 0; index < this.locations.size(); index++) {
             Location location = this.locations.get(index);
             location.setIndex(index);
-            location.setParamName(this.state_param_name);
             this.addMapLocation(location.getId(), location);
         }
         for (Branchpoint branchpoint : branchpoints) {
