@@ -27,21 +27,31 @@ public class Declaration {
     
     public void addNode(Node item) {
         String declarationString = item.getTextContent();
-        String clean = declarationString.replaceAll("\\s{2,}", " ").trim();
+        String clean = declarationString
+            .replaceAll("/\\*.*?\\*/", " ")
+            .replaceAll("//.*", " ")
+            .replaceAll("\\s{2,}", " ")
+            .trim();
         List<String> definitionList = Arrays.asList(clean.split(";"));
         for (String definition : definitionList) {
             String[] withAssign = definition.trim().split("=");
             String[] defElement = withAssign[0].split(" ");
-            Map<String,Object> mapData = new HashMap<String,Object>();
+            Map<String, Object> mapData = new HashMap<String, Object>();
             Integer last = defElement.length - 1;
             String parameterName = defElement[last];
-            if(!this.hasParam(parameterName)){
-                this.params.add(parameterName);
-                mapData.put("param", defElement);
-                mapData.put("value", withAssign.length > 1?withAssign[1].trim():null);
-                this.states.add(mapData);
-            }else{
-                throw new RuntimeException("Duplicate parameter name: "+parameterName);
+            if (last > 0) {
+                String typeOfParameter = defElement[last - 1];
+
+                if (typeOfParameter.equals("bool") || typeOfParameter.equals("clock") || typeOfParameter.equals("int")) {
+                    if (!this.hasParam(parameterName)) {
+                        this.params.add(parameterName);
+                        mapData.put("param", defElement);
+                        mapData.put("value", withAssign.length > 1 ? withAssign[1].trim() : null);
+                        this.states.add(mapData);
+                    } else {
+                        throw new RuntimeException("Duplicate parameter name `" + parameterName + "`");
+                    }
+                }
             }
         }
     }
