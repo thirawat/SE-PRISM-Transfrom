@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+clock x;
+const int count = 5;
+int tried = 1;</declaration>
+	<template>
+		<name x="5" y="5">Template</name>
+		<declaration>// Place local declarations here.</declaration>
+		<location id="id0" x="170" y="288">
+			<name x="85" y="272">Location1</name>
+			<label kind="invariant" x="93" y="297">x &lt; 5</label>
+		</location>
+		<location id="id1" x="314" y="178">
+			<name x="238" y="127">Location8</name>
+			<label kind="invariant" x="246" y="144">x&lt;5</label>
+		</location>
+		<location id="id2" x="510" y="178">
+			<name x="527" y="136">Location7</name>
+			<label kind="invariant" x="535" y="161">x&lt;5</label>
+		</location>
+		<location id="id3" x="629" y="288">
+			<name x="646" y="255">Location6</name>
+			<label kind="invariant" x="663" y="280">x&lt;15</label>
+		</location>
+		<location id="id4" x="629" y="467">
+			<name x="654" y="450">Location5</name>
+			<label kind="invariant" x="663" y="476">x&lt;15</label>
+		</location>
+		<location id="id5" x="170" y="467">
+			<name x="68" y="459">Location2</name>
+			<label kind="invariant" x="76" y="476">x &lt;7</label>
+		</location>
+		<location id="id6" x="314" y="611">
+			<name x="246" y="637">Location3</name>
+			<label kind="invariant" x="255" y="663">x &lt;10</label>
+		</location>
+		<location id="id7" x="510" y="611">
+			<name x="501" y="629">Location4</name>
+			<label kind="invariant" x="510" y="654">x &lt; 10</label>
+		</location>
+		<location id="id8" x="399" y="382">
+			<name x="348" y="391">LocationEnd</name>
+		</location>
+		<branchpoint id="id9" x="314" y="280">
+		</branchpoint>
+		<branchpoint id="id10" x="510" y="289">
+		</branchpoint>
+		<branchpoint id="id11" x="629" y="391">
+		</branchpoint>
+		<branchpoint id="id12" x="510" y="467">
+		</branchpoint>
+		<branchpoint id="id13" x="408" y="611">
+		</branchpoint>
+		<branchpoint id="id14" x="314" y="467">
+		</branchpoint>
+		<branchpoint id="id15" x="170" y="373">
+		</branchpoint>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id0"/>
+			<label kind="guard" x="442" y="170">x&lt;5</label>
+			<label kind="assignment" x="399" y="178">x=0,tried = tried+1</label>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id1"/>
+			<label kind="probability" x="467" y="272">30</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id8"/>
+			<label kind="guard" x="323" y="306">count&lt;tried</label>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id5"/>
+			<label kind="probability" x="238" y="391">20</label>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id0"/>
+			<label kind="assignment" x="188" y="284">tried =tried+1</label>
+			<label kind="probability" x="272" y="272">80</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id9"/>
+			<label kind="guard" x="187" y="204">x&lt;5 
+&amp;&amp; tried &lt;= count</label>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id2"/>
+			<label kind="probability" x="510" y="250">70</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id10"/>
+			<label kind="guard" x="535" y="306">x&lt;20</label>
+		</transition>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id2"/>
+			<label kind="assignment" x="561" y="246">x=0</label>
+			<label kind="probability" x="586" y="374">30</label>
+		</transition>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id3"/>
+			<label kind="probability" x="629" y="356">70</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id11"/>
+			<label kind="guard" x="646" y="408">x&lt;20</label>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id12"/>
+			<label kind="guard" x="476" y="510">x&lt;15</label>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id3"/>
+			<label kind="assignment" x="528" y="377">x=0</label>
+			<label kind="probability" x="510" y="416">40</label>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id4"/>
+			<label kind="probability" x="527" y="476">60</label>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id4"/>
+			<label kind="assignment" x="535" y="535">x=0</label>
+			<label kind="probability" x="416" y="578">40</label>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id7"/>
+			<label kind="probability" x="426" y="628">60</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id13"/>
+			<label kind="guard" x="357" y="578">x&lt;15</label>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id7"/>
+			<label kind="assignment" x="408" y="510">x=0</label>
+			<label kind="probability" x="348" y="476">50</label>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id6"/>
+			<label kind="probability" x="289" y="484">50</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id14"/>
+			<label kind="guard" x="246" y="442">x&lt;10</label>
+		</transition>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id6"/>
+			<label kind="assignment" x="229" y="527">x=0</label>
+			<label kind="probability" x="187" y="374">50</label>
+		</transition>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id5"/>
+			<label kind="probability" x="136" y="374">50</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id15"/>
+			<label kind="guard" x="170" y="314">x&lt;10</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+Process = Template();
+// List one or more processes to be composed into a system.
+system Process;
+    </system>
+	<queries>
+		<query>
+			<formula>[]</formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>

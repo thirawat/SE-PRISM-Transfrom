@@ -53,13 +53,11 @@ public class Transition {
     }
 
     private String probability;
-
-    public Double getFormatProbability() throws Exception {
+    public Double getProbability() throws Exception {
         if (probability == null) {
             throw new Exception("No probability on branch point transition");
         }
-        return Double.parseDouble(probability)/100;
-
+        return Double.parseDouble(probability);
     }
 
     public Transition(Node item) {

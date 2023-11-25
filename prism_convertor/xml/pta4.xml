@@ -30,9 +30,15 @@
 		<init ref="id0"/>
 		<transition>
 			<source ref="id4"/>
+			<target ref="id3"/>
+			<label kind="assignment" x="433" y="212">x:=0</label>
+			<label kind="probability" x="450" y="178">30</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
 			<target ref="id0"/>
 			<label kind="assignment" x="331" y="187">x:=0</label>
-			<label kind="probability" x="365" y="153">50</label>
+			<label kind="probability" x="391" y="178">50</label>
 		</transition>
 		<transition>
 			<source ref="id1"/>
@@ -48,7 +54,7 @@
 			<source ref="id4"/>
 			<target ref="id2"/>
 			<label kind="assignment" x="426" y="144">x:=0</label>
-			<label kind="probability" x="433" y="119">50</label>
+			<label kind="probability" x="459" y="119">20</label>
 		</transition>
 		<transition>
 			<source ref="id5"/>

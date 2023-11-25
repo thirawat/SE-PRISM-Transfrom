@@ -15,7 +15,7 @@ public class App
     public static void main( String[] args )
     {
         String xmlPath = args[0];
-        // String xmlPath = "xml/pta.xml";
+        // String xmlPath = "xml/pta_2.xml";
         // String xmlPath = "xml/simple_model.xml";
         
         PTAConverter converter = new PTAConverter();

@@ -63,9 +63,19 @@ public class PRISMModel {
                     List<Transition>  branchTransitions = targetObj.getTransitions();
                     transitionList.add("\n     ->");    
                     List<String> branchTransitionList = new ArrayList<String>();
+                    
+                    Integer countPoint = branchTransitions.size();
+                    Double sumProbability = 0.0;
+                    for(Integer i = 0; i < countPoint; i++)
+                    {
+                        Transition branchTransition = branchTransitions.get(i);
+                        sumProbability += branchTransition.getProbability();
+                    }
+                    Double weightProbability = sumProbability; 
+                    System.out.println("weightProbability: "+weightProbability);
                     for(Transition branchTransition : branchTransitions){
                         Location targetLocationObj = (Location)branchTransition.getTargetObj();
-                        Double probability = branchTransition.getFormatProbability();
+                        Double probability = branchTransition.getProbability()/weightProbability;
                         String branchTransitionString = probability+" : ("+stateParam+"'="+targetLocationObj.getIndex()+")";
                         String assignment =  this.formatAssignment(branchTransition.getAssignment());
                         if(assignment != null){
