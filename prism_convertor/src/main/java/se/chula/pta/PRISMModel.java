@@ -72,7 +72,6 @@ public class PRISMModel {
                         sumProbability += branchTransition.getProbability();
                     }
                     Double weightProbability = sumProbability; 
-                    System.out.println("weightProbability: "+weightProbability);
                     for(Transition branchTransition : branchTransitions){
                         Location targetLocationObj = (Location)branchTransition.getTargetObj();
                         Double probability = branchTransition.getProbability()/weightProbability;

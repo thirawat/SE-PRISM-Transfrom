@@ -4,7 +4,7 @@
 	<declaration>
     // Declare clock variables
     clock x;
-  	</declaration>
+  	int x;</declaration>
 	<template>
 		<name>PTA</name>
 		<location id="id0" x="263" y="357">

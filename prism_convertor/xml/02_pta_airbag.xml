@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+clock x;
+bool plausible = true;
+int plausible_ctr = 0;
+int error_ctr = 0;
+int sensor = 1;
+int crash_ctr=0;
+int iteration = 3;</declaration>
+	<template>
+		<name x="5" y="5">Template</name>
+		<declaration>// Place local declarations here.</declaration>
+		<location id="id0" x="-476" y="-204">
+			<name x="-595" y="-238">WaitForTrigger</name>
+			<label kind="invariant" x="-561" y="-212">x&lt;=5</label>
+		</location>
+		<location id="id1" x="-357" y="-51">
+			<name x="-374" y="-144">EvaluationTriggered</name>
+			<label kind="invariant" x="-408" y="-51">x&lt;=3</label>
+		</location>
+		<location id="id2" x="-34" y="-51">
+			<name x="-44" y="-85">SensorPlausible</name>
+		</location>
+		<location id="id3" x="-357" y="297">
+			<name x="-340" y="340">SensorImplausible</name>
+		</location>
+		<location id="id4" x="-34" y="178">
+			<name x="-25" y="187">SensorEvaluation</name>
+		</location>
+		<location id="id5" x="-357" y="442">
+			<name x="-340" y="425">SensorDefect</name>
+		</location>
+		<location id="id6" x="-34" y="314">
+			<name x="-17" y="323">CrashDetected</name>
+		</location>
+		<location id="id7" x="-34" y="442">
+			<name x="-8" y="442">FireAirbag</name>
+		</location>
+		<branchpoint id="id8" x="-229" y="-51">
+		</branchpoint>
+		<branchpoint id="id9" x="-357" y="76">
+		</branchpoint>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id4"/>
+			<label kind="guard" x="-153" y="93">plausible_ctr&lt;iteration</label>
+			<nail x="-102" y="76"/>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id3"/>
+			<label kind="assignment" x="-382" y="204">error_ctr++,plausible_ctr=0</label>
+			<label kind="probability" x="-255" y="-34">1</label>
+			<nail x="-229" y="238"/>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id2"/>
+			<label kind="assignment" x="-212" y="-25">plausible_ctr++</label>
+			<label kind="probability" x="-204" y="-85">99</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id8"/>
+			<label kind="guard" x="-340" y="-93">plausible
+&amp;&amp; x&gt;=1</label>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id2"/>
+			<label kind="assignment" x="-212" y="-42">plausible_ctr++</label>
+			<label kind="probability" x="-323" y="59">1</label>
+			<nail x="-178" y="76"/>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id3"/>
+			<label kind="assignment" x="-382" y="221">error_ctr++,plausible_ctr=0</label>
+			<label kind="probability" x="-382" y="93">99</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id7"/>
+			<label kind="guard" x="-34" y="365">crash_ctr&gt;=iteration</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id5"/>
+			<label kind="guard" x="-450" y="365">error_ctr&gt;=iteration</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id0"/>
+			<label kind="guard" x="-280" y="-297">crash_ctr&lt;iteration</label>
+			<label kind="assignment" x="-136" y="-297">x=0</label>
+			<nail x="204" y="314"/>
+			<nail x="204" y="-263"/>
+			<nail x="-476" y="-263"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id6"/>
+			<label kind="guard" x="-110" y="229">sensor&gt;iteration</label>
+			<label kind="assignment" x="-119" y="246">crash_ctr++</label>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id4"/>
+			<label kind="guard" x="-17" y="0">plausible_ctr&gt;=iteration</label>
+			<label kind="assignment" x="-8" y="34">error_ctr=0</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id0"/>
+			<label kind="guard" x="-331" y="-229">sensor&lt;=iteration</label>
+			<label kind="assignment" x="-195" y="-229">crash_ctr=0,x=0,sensor++</label>
+			<nail x="161" y="178"/>
+			<nail x="161" y="-204"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id0"/>
+			<label kind="guard" x="-561" y="246">error_ctr&lt;iteration</label>
+			<label kind="assignment" x="-527" y="272">x=0</label>
+			<nail x="-476" y="297"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id9"/>
+			<label kind="guard" x="-442" y="8">!plausible
+&amp;&amp; x&gt;=1</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-433" y="-178">x&gt;=1</label>
+			<label kind="assignment" x="-425" y="-102">x=0</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+Process = Template();
+// List one or more processes to be composed into a system.
+system Process;
+    </system>
+	<queries>
+		<query>
+			<formula></formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>

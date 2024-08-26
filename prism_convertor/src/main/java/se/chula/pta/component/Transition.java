@@ -42,6 +42,8 @@ public class Transition {
         return guard != null
                 ? guard
                         .replaceAll("&&", "&")
+                        .replaceAll("==", "=")
+                        .replaceAll("\n", "")
                         .replaceAll("\\|\\|", "|")
                 : null;
     }
